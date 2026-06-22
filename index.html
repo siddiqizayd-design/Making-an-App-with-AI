@@ -116,7 +116,7 @@
 
         .task-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 12px;
             padding: 12px;
             margin-bottom: 10px;
@@ -151,12 +151,24 @@
             height: 20px;
             cursor: pointer;
             accent-color: #00ff88;
+            margin-top: 2px;
+        }
+
+        .task-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
         .task-text {
-            flex: 1;
             color: #00ff88;
             word-break: break-word;
+        }
+
+        .task-due-date {
+            font-size: 0.85em;
+            color: rgba(0, 255, 136, 0.65);
         }
 
         .btn-delete {
@@ -254,6 +266,24 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
         }
 
+        // Format a due date for display
+        function formatDueDate(dueDate) {
+            if (!dueDate) {
+                return '';
+            }
+
+            const date = new Date(`${dueDate}T00:00:00`);
+            if (Number.isNaN(date.getTime())) {
+                return dueDate;
+            }
+
+            return date.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
         // Render all tasks
         function renderTasks() {
             const tasks = loadTasks();
@@ -274,7 +304,10 @@
                         ${task.completed ? 'checked' : ''} 
                         onchange="toggleTask(${index})"
                     >
-                    <span class="task-text">${escapeHtml(task.text)}</span>
+                    <div class="task-content">
+                        <span class="task-text">${escapeHtml(task.text)}</span>
+                        ${task.dueDate ? `<span class="task-due-date">Due: ${escapeHtml(formatDueDate(task.dueDate))}</span>` : ''}
+                    </div>
                     <button class="btn-delete" onclick="deleteTask(${index})">DELETE</button>
                 </div>
             `).join('');
