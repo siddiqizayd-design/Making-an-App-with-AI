@@ -45,10 +45,11 @@
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
-        input#taskInput {
-            flex: 1;
+        input#taskInput,
+        input#dueDateInput {
             padding: 12px;
             background: rgba(0, 255, 136, 0.05);
             border: 1px solid #00ff88;
@@ -58,13 +59,27 @@
             font-size: 1em;
         }
 
+        input#taskInput {
+            flex: 1 1 220px;
+        }
+
+        input#dueDateInput {
+            flex: 0 1 160px;
+        }
+
         input#taskInput::placeholder {
             color: rgba(0, 255, 136, 0.5);
         }
 
-        input#taskInput:focus {
+        input#taskInput:focus,
+        input#dueDateInput:focus {
             outline: none;
             box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        input#dueDateInput::-webkit-calendar-picker-indicator {
+            filter: invert(77%) sepia(85%) saturate(481%) hue-rotate(87deg) brightness(106%) contrast(104%);
+            cursor: pointer;
         }
 
         button {
@@ -203,6 +218,11 @@
                 id="taskInput" 
                 placeholder="Enter a new task..."
                 autocomplete="off"
+            >
+            <input
+                type="date"
+                id="dueDateInput"
+                aria-label="Task due date"
             >
             <button class="btn-add" onclick="addTask()">ADD</button>
         </div>
